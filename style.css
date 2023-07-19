@@ -52,7 +52,7 @@ body {
     font-family: 'Indie Flower', cursive;
 }
 
-.quote-container>p {
+.quote-container > p {
     font-family: 'Nunito', sans-serif;
     font-size: 1vmax;
 }
@@ -125,4 +125,17 @@ button {
 .meat-text {
     padding: 1vw;
     font-size: 1vmax;
+}
+
+#display-user {
+    position: relative;
+    display: inline-block;
+}
+
+.menu {
+    display: block;
+    position: absolute;
+    bottom: 100%;
+    min-width: 160px;
+    z-index: 1;
 }
