@@ -45,4 +45,15 @@ class Renderer {
         const newHtml = template({users})
         $('#menu-container').append(newHtml)
     }
+
+    giphy(giph) {
+        console.log(giph)
+        let gifUrl = giph.data[0].embed_url;
+        if (gifUrl !== ""){
+            const source = $('#giphy-template').html()
+            const template = Handlebars.compile(source)
+            const newHtml = template({gifUrl})
+            $('.pokemon-container').append(newHtml)
+        }
+    }
 }

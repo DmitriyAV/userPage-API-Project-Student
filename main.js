@@ -10,24 +10,33 @@ const emptyAll = function () {
     $('.pokemon-container').empty()
     $('.friends-container').empty()
 }
-const getNewUser = async function () {
-    await data.getUsers()
-}
-$("#gen-page").on("click", async function () {
-    emptyAll()
+
+const load = async function () {
+    let pok = "pokemon "
     await getNewUser()
     let user = data.getMainUser()
     let usersFriends = data.getFriends()
     let quote = await data.getQuote()
     let poke = await data.getRandomPoke()
     let bacon = await data.getBaconApi()
-    let u = {user, usersFriends, quote, poke, bacon}
+    let giphy = await data.callGiphy(`${pok}${poke.name}`)
+    let u = {user, usersFriends, quote, poke, bacon, giphy}
     mainUser.push(u)
-    render.userInfo(user)
-    render.friends(usersFriends)
-    render.quote(quote)
-    render.poke(poke)
-    render.aboutMe(bacon)
+}
+const getNewUser = async function () {
+    await data.getUsers()
+}
+$("#gen-page").on("click", async function () {
+    mainUser = []
+    emptyAll()
+    await load()
+    const d = mainUser[0]
+    render.userInfo(d.user)
+    render.friends(d.usersFriends)
+    render.quote(d.quote)
+    render.poke(d.poke)
+    render.aboutMe(d.bacon)
+    render.giphy(d.giphy)
 })
 
 $('#save-user').on("click", function () {
@@ -59,6 +68,7 @@ $('#display-user').on("mouseenter",  function () {
     }
 })
 
-$('#display-user').on("mouseleave", function () {
+$('#display-user').on("mouseleave",  function () {
+    $('.menu').empty()
     $(this).find(".menu").remove()
 })

@@ -43,7 +43,7 @@
 
 </script>
 <script id="quote-template" type="text/x-handlebars-template">
- <p>{{text.quote}}</p>
+    <p>{{text.quote}}</p>
 </script>
 <script id="about-template" type="text/x-handlebars-template">
 
@@ -52,7 +52,7 @@
     </p>
 </script>
 <script id="pokemon-template" type="text/x-handlebars-template">
-<img id="pokemon-image" src={{pokeImg}} alt="Full size image">
+    <img id="pokemon-image" src={{pokeImg}} alt="Full size image">
     <div id="pokemon-text">Favorite pokemon: {{pokeName}}</div>
 </script>
 <script id="friends-template" type="text/x-handlebars-template">
@@ -61,6 +61,11 @@
             <li>{{this.name.first}} {{this.name.last}}</li>
         {{/each}}
     </ul>
+</script>
+<script id="giphy-template" type="text/x-handlebars-template">
+    <div id="iframePoke">
+        <iframe id="giph" src="{{gifUrl}}"></iframe>
+    </div>
 </script>
 <script id="menu-template" type="text/x-handlebars-template">
     <ul class="menu">
