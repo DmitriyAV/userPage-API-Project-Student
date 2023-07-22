@@ -29,7 +29,7 @@
         <button id="gen-page">Generate</button>
         <button id="save-user">Save User Page</button>
         <button id="display-user">Load User Page</button>
-        <div id="menu-container"></div>
+        <!--<div id="menu-container"></div>-->
     </div>
 </div>
 
@@ -70,7 +70,11 @@
 <script id="menu-template" type="text/x-handlebars-template">
     <ul class="menu">
         {{#each users}}
-            <li class="user-info">{{this.name.first}} {{this.name.last}}</li>
+            <li>{{{key}}}
+                <img class="cross"
+                     src="https://icons.veryicon.com/png/o/brands/digital-background-logo-administration/small-icon-delete.png">
+
+            </li>
         {{/each}}
     </ul>
 </script>

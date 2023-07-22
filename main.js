@@ -18,14 +18,9 @@ class Controller {
         $('.friends-container').empty()
     }
 
-    async loadGif() {
-        await this.#model.callGiphy(this.#model.getPokeName())
-    }
+    async loadGif() { await this.#model.callGiphy(this.#model.getPokeName()) }
 
-    async load() {
-        await this.#model.callAllAPI()
-    }
-
+    async load() { await this.#model.callAllAPI()}
 
     render() {
         this.#view.userInfo(this.#model.getMainUser())
@@ -36,48 +31,43 @@ class Controller {
         this.#view.giphy(this.#model.getGiphyPoke())
     }
 
+    saveUser(key, value) {
+        this.#model.saveInLocalStore(key, value)
+    }
+
     renderMenuSavedUsers() {
-        let users = this.#model.getAllData()
+        let users = this.#model.getLocalUsers()
         if (users.length !== 0) {
             this.#view.menu(users)
         }
+        else alert("User list is empty saved.")
     }
 
-    getMainUser() {
-        return this.#model.getMainUser()
-    }
-
-    getAllData() {
-        return this.#model.getAllData()
-    }
-
+    getMainUser() { return this.#model.getMainUser() }
+    getAllData() { return this.#model.getAllData() }
 }
 
 const main = new Controller(new APIManager(), new Renderer())
 
 $("#gen-page").on("click", async function () {
-
     main.emptyAll()
     await main.load()
     await main.loadGif()
     await main.render()
-
 })
 
 $('#save-user').on("click", function () {
     let name = main.getMainUser()
     let data = main.getAllData()
-    localStorage.setItem(`${name}`, data)
-
+    let fullName = `${name.name.first} ${name.name.last}`
+    main.saveUser(fullName, data)
+    alert("User is saved!")
 })
 
-$('#display-user').on("mouseenter", function () {
+$('#display-user').on("mouseenter",function () {
     main.renderMenuSavedUsers()
-    $(this).find('.menu').show();
-
 })
 
-$('#display-user').on("mouseleave", function () {
-    $('.menu').empty()
-    $(this).find(".menu").remove()
+$('#display-user').on("mouseleave",function () {
+    $(this).closest("#menu-container").find(".menu").remove()
 })

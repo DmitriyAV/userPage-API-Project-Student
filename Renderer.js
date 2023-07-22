@@ -39,10 +39,11 @@ class Renderer {
     }
 
     menu(users) {
+        console.log(users)
         const source = $('#menu-template').html()
         const template = Handlebars.compile(source)
         const newHtml = template({users})
-        $('#menu-container').append(newHtml)
+        $('#display-user').append(newHtml)
     }
 
     giphy(giphy) {
