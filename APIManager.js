@@ -18,50 +18,103 @@ class APIManager {
     }
 
     async callGiphy(search) {
+        let phrase = "pokemon "
         let api_key = "NjQjqYxuRKXNyE9dbjyHmq3JfQNe3neA";
-        let uri = `https://api.giphy.com/v1/gifs/search?q=${search}&api_key=${api_key}&limit=5`;
-        return await $.get(uri)
+        let uri = `https://api.giphy.com/v1/gifs/search?q=${phrase}${search}&api_key=${api_key}&limit=5`;
+         await $.get(uri).then( r => this.setGiphyPoke(r.data[1].embed_url))
     }
 
-    async getBaconApi() {
+    async callBaconApi() {
         return await $.get(this.#baconApi)
     }
 
-    async callPokeApi(id) {
+    async #callPokeApi(id) {
         return await $.get(`${this.#pokeApi}${id}`)
     }
 
     async getRandomPoke() {
         let randId = Math.floor(Math.random() * 949)
-        return await this.callPokeApi(randId)
+        return await this.#callPokeApi(randId)
     }
 
     async callKanyeApi() {
         return await $.get(this.#kanyeQuote)
     }
 
-    async getQuote() {
-        return await this.callKanyeApi()
-    }
-
-    async callUserApi() {
+    async callUsersApi() {
         return await $.get(this.#userUrl)
     }
 
-    async getUsers() {
-        let data = await this.callUserApi()
-        this.#data = data.results
+    async callAllAPI() {
+        try {
+            const [usersData, kanyeData, pokeData, baconData] = await Promise
+                .all([this.callUsersApi(), this.callKanyeApi(), this.getRandomPoke(), this.callBaconApi()])
+            this.#data.mainUser = usersData.results[0]
+            this.#data.friends = usersData.results.map(user => {
+                if (!user[0]) {
+                    return user
+                }
+            })
+            this.#data.pokemon = {name: pokeData.name, img: pokeData.sprites.front_default}
+            this.#data.pokemon.gif = await this.callGiphy(this.#data.pokemon.name)
+            this.#data.quote = kanyeData
+            this.#data.adout = baconData
+
+        } catch (err) {
+            console.log(err)
+
+        }
+    }
+
+    setGiphyPoke(giphyUrl) {
+        this.#data.pokemon.gif = giphyUrl
     }
 
     getMainUser() {
-        return this.#data[0]
+        return this.#data.mainUser
     }
 
     getFriends() {
-        return this.#data.map(u => {
-            if (!u[0]) {
-                return u
-            }
-        })
+        let f = this.#data.friends
+        console.log(f)
+        return f
     }
+
+    getQuote() {
+        return this.#data.quote
+    }
+
+    getPoke() {
+        return this.#data.pokemon
+    }
+
+    getAbout() {
+        return this.#data.adout
+    }
+
+    getPokeName(){
+        return this.#data.pokemon.name
+    }
+
+    getGiphyPoke() {
+        return this.#data.pokemon.gif
+    }
+
+    getAllData() {
+        return this.#data
+    }
+
+    getLocalUsers = function () {
+        const values = []
+        const keys = Object.keys(localStorage)
+        let i = keys.length
+
+        while (i--) {
+            const key = keys[i]
+            const val = localStorage.getItem(key)
+            values.push({key, val})
+        }
+        return values
+    }
+
 }
