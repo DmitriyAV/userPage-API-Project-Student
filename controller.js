@@ -10,17 +10,15 @@ class Controller {
 
     }
 
-    emptyAll() {
-        $('.user-container').empty()
-        $('.quote-container').empty()
-        $('.meat-container').empty()
-        $('.pokemon-container').empty()
-        $('.friends-container').empty()
+    // async loadGif() { await this.#model.callGiphy(this.#model.getPokeName()) }
+
+    async load() {
+        await this.#model.callAllAPI()
     }
 
-    async loadGif() { await this.#model.callGiphy(this.#model.getPokeName()) }
-
-    async load() { await this.#model.callAllAPI()}
+    emptyElements() {
+        this.#view.emptyAll()
+    }
 
     render() {
         this.#view.userInfo(this.#model.getMainUser())
@@ -39,35 +37,38 @@ class Controller {
         let users = this.#model.getLocalUsers()
         if (users.length !== 0) {
             this.#view.menu(users)
-        }
-        else alert("User list is empty saved.")
+        } else alert("User list is empty saved.")
     }
 
-    getMainUser() { return this.#model.getMainUser() }
-    getAllData() { return this.#model.getAllData() }
+    getMainUser() {
+        return this.#model.getMainUser()
+    }
+
+    getAllData() {
+        return this.#model.getAllData()
+    }
 }
 
-const main = new Controller(new APIManager(), new Renderer())
+const controller = new Controller(new APIManager(), new Renderer())
 
 $("#gen-page").on("click", async function () {
-    main.emptyAll()
-    await main.load()
-    await main.loadGif()
-    await main.render()
+    controller.emptyElements()
+    await controller.load()
+    await controller.render()
 })
 
 $('#save-user').on("click", function () {
-    let name = main.getMainUser()
-    let data = main.getAllData()
+    let name = controller.getMainUser()
+    let data = controller.getAllData()
     let fullName = `${name.name.first} ${name.name.last}`
-    main.saveUser(fullName, data)
+    controller.saveUser(fullName, data)
     alert("User is saved!")
 })
 
-$('#display-user').on("mouseenter",function () {
-    main.renderMenuSavedUsers()
+$('#display-user').on("mouseenter", function () {
+    controller.renderMenuSavedUsers()
 })
 
-$('#display-user').on("mouseleave",function () {
+$('#display-user').on("mouseleave", function () {
     $(this).closest("#menu-container").find(".menu").remove()
 })

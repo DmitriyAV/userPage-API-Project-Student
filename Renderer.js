@@ -1,5 +1,13 @@
 class Renderer {
 
+    emptyAll() {
+        $('.user-container').empty()
+        $('.quote-container').empty()
+        $('.meat-container').empty()
+        $('.pokemon-container').empty()
+        $('.friends-container').empty()
+    }
+
     userInfo(user) {
         const source = $('#user-template').html()
         const template = Handlebars.compile(source)
@@ -50,7 +58,7 @@ class Renderer {
         if (giphy !== "") {
             const source = $('#giphy-template').html()
             const template = Handlebars.compile(source)
-            const newHtml = template({giphy})
+            const newHtml = template({giphy: giphy.data[0].embed_url})
             $('.pokemon-container').append(newHtml)
         }
     }
